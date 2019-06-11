@@ -1,0 +1,31 @@
+//Return the lexicographically smallest subsequence of text that contains all the distinct characters of text exactly once.
+
+string smallestSubsequence(string text) {
+        unordered_map<char,int> m;
+        for(auto a : text) m[a]++;
+        stack<char> st;
+        set<char> seen;
+        int i = 0;
+        while(i < text.size()){
+            char c = text[i++];
+            m[c]--;
+            if(seen.find(c)!=seen.end()){
+                continue;
+            }
+            while(!st.empty()&& st.top()-'a' > c-'a'){
+                 if(m[st.top()]>=1){
+                    seen.erase(st.top());
+                    st.pop();
+                 }else
+                     break;
+            }
+            seen.insert(c);
+            st.push(c);
+        }
+        string res;
+        while(!st.empty()){
+            res=st.top()+res;
+            st.pop();
+        }
+        return res;
+    }
