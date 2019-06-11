@@ -1,4 +1,6 @@
 //Return the lexicographically smallest subsequence of text that contains all the distinct characters of text exactly once.
+//Input: "cdadabcc"
+//Output: "adbc"
 
 string smallestSubsequence(string text) {
         unordered_map<char,int> m;
@@ -29,3 +31,52 @@ string smallestSubsequence(string text) {
         }
         return res;
     }
+
+
+/*
+Problem:
+Given an array A, we can perform a pancake flip: 
+We choose some positive integer k <= A.length, then reverse the order of the first k elements of A. 
+We want to perform zero or more pancake flips (doing them one after another in succession) to sort the array A.
+Return the k-values corresponding to a sequence of pancake flips that sort A.  
+Any valid answer that sorts the array within 10 * A.length flips will be judged as correct.
+Solution:
+1. find max element index
+2. if index is 0 reverse whole string
+3. if it is the current last element of array pop last element
+4. else reverse string from 0 to index
+5. once array is empty stop
+*/
+class PancakeSorting:
+{
+private:
+     int maxi(vector<int>& a){
+        int maxe=INT_MIN;
+        int idx = -1;
+        for(int i =0; i < a.size(); i++){
+            int e = a[i];
+            if(e > maxe){
+                maxe=e;
+                idx=i;
+            }
+        }
+        return idx;
+    }
+public:
+    vector<int> pancakeSort(vector<int>& a) {
+        vector<int> res;
+        while(!a.empty()){
+            int i = maxi(a);
+            if(i==a.size()-1){
+                a.pop_back();
+            } else if (i==0) {
+                res.push_back(a.size());
+                reverse(a.begin(),a.end());
+            } else {
+                res.push_back(i+1);
+                reverse(a.begin(),a.begin()+i+1);
+            }
+        }
+        return res;
+    } 
+ }
