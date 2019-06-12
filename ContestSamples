@@ -79,4 +79,56 @@ public:
         }
         return res;
     } 
- }
+ };
+
+
+/*
+Problem:
+Given a 2-dimensional grid of integers, each value in the grid represents the color of the grid square at that location.
+Two squares belong to the same connected component if and only if they have the same color and are next to each other in any 
+of the 4 directions.
+The border of a connected component is all the squares in the connected component that are either 4-directionally adjacent to
+a square not in the component, or on the boundary of the grid (the first or last row or column).
+
+Given a square at location (r0, c0) in the grid and a color, color the border of the connected component of that square with the given color, and return the final grid
+class ColoringBorder {
+public:
+    vector<vector<int>> colorBorder(vector<vector<int>>& a, int r0, int c0, int col) {
+        queue<pair<int,int>> q;
+        q.push({r0,c0});
+        set<pair<int,int>> visited;
+        int cur = a[r0][c0];
+        while(!q.empty()){
+            auto x = q.front();
+            q.pop();
+            if(!visited.insert(x).second)
+                continue;
+            int i = x.first,j=x.second;
+            if(i < 0 || j < 0 || i >= a.size() || j >= a[0].size())
+                continue;
+            if(i==0 || i== a.size()-1 || j==0 ||j == a[0].size()-1){
+                a[i][j]=-cur;
+            }
+            else if(abs(a[i-1][j])!=cur || abs(a[i+1][j])!=cur 
+                   || abs(a[i][j-1])!=cur || abs(a[i][j+1])!=cur)
+            {
+                a[i][j]=-cur;
+            }
+            if(i > 0 && a[i-1][j]==cur)
+                q.push({i-1,j});
+            if(j > 0 && a[i][j-1]==cur)
+                q.push({i,j-1});
+            if(i < a.size()-1 && a[i+1][j]==cur)
+                q.push({i+1,j});
+            if(j < a[i].size()-1 && a[i][j+1]==cur)
+                q.push({i,j+1});
+        }
+        for(int i = 0; i < a.size(); i++){
+            for(int j = 0; j < a[i].size(); j++){
+                if(a[i][j]==-cur)
+                    a[i][j]=col;
+            }
+        }
+        return a;
+    }
+};
