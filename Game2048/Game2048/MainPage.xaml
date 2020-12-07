@@ -18,7 +18,7 @@
                        />
         </DataTemplate>
     </Page.Resources>
-    <Grid  Name="GameGrid" Background="LightPink">
+    <Grid  Name="GameGrid" >
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="StateGroupPhone">
                 <VisualState x:Name="StatePhone">
@@ -50,21 +50,22 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+        <Image Stretch="Fill"  VerticalAlignment="Center" HorizontalAlignment="Center" Source="Assets/donuts-coffee.png"/>
 
         <Grid HorizontalAlignment="Center"
                   VerticalAlignment="Center">
-        <!--{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
+            <!--{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="198"/>
-        </Grid.ColumnDefinitions>
-        <Button Name="FlyoutButton"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="198"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="FlyoutButton"
                 Margin="20,0,0,20"
-                Background="LightPink"
+                Opacity="0"
                 Grid.Row="2" 
                 Grid.Column="1">
             <Button.Flyout >
