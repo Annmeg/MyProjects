@@ -22,7 +22,12 @@
             </Border>
         </DataTemplate>
     </Page.Resources>
+    <Grid>
+        <Image Stretch="Fill"  VerticalAlignment="Center"
+               HorizontalAlignment="Center" 
+               Source="Assets/xmas3.png"/>
 
+   
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
@@ -66,6 +71,6 @@
                 </Flyout>
             </Button.Flyout>
         </Button>
-
+        </Grid>
     </Grid>
 </Page>
