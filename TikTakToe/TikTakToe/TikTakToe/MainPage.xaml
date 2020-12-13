@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TikTakToe.MainPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="Margin" Value="0, 10" />
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="Margin" Value="0, 5" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid BackgroundColor="PowderBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Text="Tik Tak Toe" TextColor="White" 
+               FontSize="Large"
+               Grid.Column="1"
+               FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"/>
+        <AbsoluteLayout Grid.Column="1" Grid.Row="1" x:Name="absoluteLayout"
+                        BackgroundColor="PowderBlue"
+                          SizeChanged="OnLayoutSizeChanged" />
+        
+    </Grid>
+</ContentPage>

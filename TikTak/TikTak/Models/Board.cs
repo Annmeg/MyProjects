@@ -23,6 +23,7 @@ namespace TikTak.Models
             // Raise the PropertyChanged event, passing the name of the property whose value has changed.
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+       
     }
     public class Board
     {
