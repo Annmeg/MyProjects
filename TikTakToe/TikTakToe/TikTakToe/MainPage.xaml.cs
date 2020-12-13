@@ -12,10 +12,6 @@ namespace TikTakToe
     {
         const int CellSpacing = 2;
 
-        // Generating too many BoxView elements can impact performance, 
-        //      particularly on iOS devices.
-        const int MaxCellCount = 15;
-
         // Calculated during SizeChanged event 
         int cols;
         int rows;
@@ -31,20 +27,9 @@ namespace TikTakToe
         void OnLayoutSizeChanged(object sender, EventArgs args)
         {
             Layout layout = sender as Layout;
-            cols = 3;// (int)Math.Round(layout.Width / MaxCellSize);
-            rows = 3;// (int)Math.Round(layout.Height / MaxCellSize);
-
-            if (cols * rows > MaxCellCount)
-            {
-                cellSize = (int)Math.Sqrt((layout.Width * layout.Height) / MaxCellCount);
-                cols = (int)(layout.Width / cellSize);
-                rows = (int)(layout.Height / cellSize);
-            }
-            else
-            {
-                cellSize = (int)Math.Min(layout.Width / cols, layout.Height / rows);
-            }
-
+            cols = 3;
+            rows = 3;
+            cellSize = (int)Math.Min(layout.Width / cols, layout.Height / rows);
             xMargin = (int)((layout.Width - cols * cellSize) / 2);
             yMargin = (int)((layout.Height - rows * cellSize) / 2);
             
@@ -87,8 +72,6 @@ namespace TikTakToe
 
             System.Diagnostics.Debug.WriteLine("Count = " + count);
 
-
-            // Possibly add more LifeCell children
             while (absoluteLayout.Children.Count < count)
             {
                 Cell cell = new Cell();
