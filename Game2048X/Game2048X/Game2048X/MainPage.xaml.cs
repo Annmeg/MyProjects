@@ -1,18 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace TikTakToe
+namespace Game2048X
 {
     public partial class MainPage : ContentPage
     {
         const int CellSpacing = 2;
 
-        // Calculated during SizeChanged event 
         int cols;
         int rows;
         int cellSize;
         int xMargin;
         int yMargin;
+        bool isGameOver = false;
         Grid grid = new Grid();
 
         public MainPage()
@@ -22,47 +27,75 @@ namespace TikTakToe
         void OnLayoutSizeChanged(object sender, EventArgs args)
         {
             Layout layout = sender as Layout;
-            cols = 3;
-            rows = 3;
+            cols = 4;
+            rows = 4;
             cellSize = (int)Math.Min(layout.Width / cols, layout.Height / rows);
             xMargin = (int)((layout.Width - cols * cellSize) / 2);
             yMargin = (int)((layout.Height - rows * cellSize) / 2);
-            
+
             if (cols > 0 && rows > 0)
             {
                 grid.SetSize(cols, rows);
                 UpdateLayout();
             }
+            grid.InitSpawn();
+            UpdateView();
         }
-        async void OnTapGestureTapped(object sender, EventArgs args)
+        void UpdateView()
         {
-            Cell cell = (Cell)sender;
-            cell.IsEmpty = false;
-            grid.SetStatus(cell.Row, cell.Col, "X");
-            UpdateView();
-            var res = grid.ComputerMove();
-            UpdateView();
-            if (res == 0 || res == 1 || res == 2)
+            bool isgameover = true;
+            foreach (View view in absoluteLayout.Children)
             {
-                string game_result = res == 0 ? "Draw!" : res == 1 ? "You win!" : "You lost!";
-                await DisplayAlert(game_result, "Game Over!", "Start new game?");
+                Cell cell = view as Cell;
+                cell.Value = grid.GetCellValue(cell.Row, cell.Col);
+                if (cell.Value == "")
+                    isgameover = false;
+            }
+            isGameOver = isgameover;
+        }
+       async void OnSwipeGestureSwiped(object sender, EventArgs args)
+        {
+            var e = args as SwipedEventArgs;
+            Cell cell = (Cell)sender;
+            int row = cell.Row;
+            int col = cell.Col;
+            switch (e.Direction)
+            {
+                case SwipeDirection.Left:
+                    grid.SwipeLeft();
+                    break;
+                case SwipeDirection.Right:
+                    grid.SwipeRight();
+                    break;
+                case SwipeDirection.Up:
+                    grid.SwipeUp();
+                    break;
+                case SwipeDirection.Down:
+                    grid.SwipeDown();
+                    break;
+            }
+            //generate random number(2 or 4), put in random cell 
+            grid.Spawn();
+            UpdateView();
+            if (grid.isWin)
+            {
+                await DisplayAlert("You win!", "Game Over!", "Ok");
+                grid.Clear();
+                UpdateView();
+                return;
+            }
+            if (isGameOver)
+            {
+                await DisplayAlert("You lost!", "Game Over!", "Ok");
                 grid.Clear();
                 UpdateView();
                 return;
             }
         }
 
-        void UpdateView()
+         void UpdateLayout()
         {
-            foreach (View view in absoluteLayout.Children)
-            {
-                Cell cell = view as Cell;
-                cell.IsEmpty = grid.IsEmpty(cell.Row, cell.Col);
-                cell.Value = grid.GetCellValue(cell.Row, cell.Col);
-            }
-        }
-        void UpdateLayout()
-        {
+
             int count = rows * cols;
 
             System.Diagnostics.Debug.WriteLine("Count = " + count);
@@ -70,7 +103,7 @@ namespace TikTakToe
             while (absoluteLayout.Children.Count < count)
             {
                 Cell cell = new Cell();
-                cell.Tapped += OnTapGestureTapped;
+                cell.Swiped += OnSwipeGestureSwiped;
                 absoluteLayout.Children.Add(cell);
             }
 
@@ -91,5 +124,15 @@ namespace TikTakToe
                     index++;
                 }
         }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            grid.Clear();
+            grid.InitSpawn();
+            UpdateView();
+        }
     }
 }
+
+
+

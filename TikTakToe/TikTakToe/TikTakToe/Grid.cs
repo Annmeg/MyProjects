@@ -21,7 +21,7 @@ namespace TikTakToe
         public void SetSize(int cols, int rows)
         {
             if (cols <= 0 || rows <= 0)
-                throw new ArgumentException("LifeGrid.SetSize: Arguments must be greater than zero");
+                throw new ArgumentException("Grid.SetSize: Arguments must be greater than zero");
             this.cols = cols;
             this.rows = rows;
         }

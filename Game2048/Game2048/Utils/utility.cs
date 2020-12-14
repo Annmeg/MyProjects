@@ -155,7 +155,7 @@ namespace Game2048.Utils
             {
                 case "Up":
                     for (int i = 0; i < 4; i++)
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < 3; j++)
                         {
                             if (board[j, i] == 0)
                             {
@@ -192,7 +192,7 @@ namespace Game2048.Utils
                     break;
                 case "Left":
                     for (int i = 0; i < 4; i++)
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < 3; j++)
                         {
                             if (board[i, j] == 0)
                             {

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Game2048X.MainPage">
+
+    <Grid BackgroundColor="PowderBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <Label Text="2048" TextColor="White" 
+               FontSize="Large"
+               Grid.Column="1"
+               FontAttributes="Bold"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+                   />
+        <Button Text="New Game?"
+                Grid.Column="1"
+                Grid.Row="2"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                    TextColor="Black" FontSize="Medium" 
+                    BackgroundColor="White"
+                    HeightRequest="40"
+                Clicked="Button_Clicked"
+                    />
+        <AbsoluteLayout Grid.Column="1" Grid.Row="1" x:Name="absoluteLayout"
+                        BackgroundColor="PowderBlue"
+                          SizeChanged="OnLayoutSizeChanged"
+                        />
+    </Grid>
+</ContentPage>
