@@ -5,9 +5,13 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="Label">
-                <Setter Property="TextColor" Value="Black" />
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="Margin" Value="0, 10" />
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
             </Style>
 
             <Style TargetType="Button">
@@ -29,11 +33,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Text="Tik Tak Toe" TextColor="White" 
-               FontSize="Large"
                Grid.Column="1"
-               FontAttributes="Bold"
-               HorizontalTextAlignment="Center"
-               VerticalTextAlignment="Center"/>
+               Style="{StaticResource LabelStyle}"
+              />
         <AbsoluteLayout Grid.Column="1" Grid.Row="1" x:Name="absoluteLayout"
                         BackgroundColor="PowderBlue"
                           SizeChanged="OnLayoutSizeChanged" />
