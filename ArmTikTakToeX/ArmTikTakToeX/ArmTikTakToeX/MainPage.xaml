@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ArmTikTakToeX.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontSize" Value="Title"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+             </Style>
+            <Style x:Key="LineStyle" TargetType="Line">
+                <Setter Property="StrokeDashArray" Value="4,4"/>
+                <Setter Property="StrokeDashOffset" Value="10"/>
+                <Setter Property="Grid.Row" Value="1"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="Stroke" Value="Gray"/>
+                <Setter Property="StrokeThickness" Value="2"/>
+             </Style>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Margin" Value="0,40,0,0"/>
+                <Setter Property="TextColor" Value="Blue"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="HeightRequest" Value="40"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid BackgroundColor="PowderBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="400" />
+            <RowDefinition Height="200" />
+          </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Style="{StaticResource TitleStyle}" 
+               Text="Armenian TikTakToe"
+                   />
+        <Button Style="{StaticResource ButtonStyle}" 
+            Text="New Game?"
+                Grid.Column="1"
+                Grid.Row="2"
+                Clicked="Button_Clicked"/>
+
+        <AbsoluteLayout Grid.Column="1" Grid.Row="1" x:Name="absoluteLayout"
+                        SizeChanged="OnLayoutSizeChanged"
+                        />
+        <!--draw diagonals-->
+        <Line Style="{StaticResource LineStyle}" X1="30"
+      Y1="30"
+      X2="270"
+      Y2="270" />
+        <Line Style="{StaticResource LineStyle}" X1="270"
+      Y1="30"
+      X2="30"
+      Y2="270"/>
+
+        <!--draw verticals-->
+        <Line Style="{StaticResource LineStyle}"
+              X1="30"
+      Y1="30"
+      X2="30"
+      Y2="270"/>
+        <Line Style="{StaticResource LineStyle}"
+              X1="150"
+      Y1="30"
+      X2="150"
+      Y2="270"/>
+
+        <Line Style="{StaticResource LineStyle}"
+              X1="270"
+      Y1="30"
+      X2="270"
+      Y2="270"/>
+        <!--draw horizontals-->
+        <Line Style="{StaticResource LineStyle}"
+            X1="30"
+      Y1="30"
+      X2="270"
+      Y2="30"/>
+        <Line Style="{StaticResource LineStyle}" X1="30"
+      Y1="150"
+      X2="270"
+      Y2="150"
+    />
+        <Line Style="{StaticResource LineStyle}" X1="30"
+      Y1="270"
+      X2="270"
+      Y2="270"
+      />
+    </Grid>
+</ContentPage>
