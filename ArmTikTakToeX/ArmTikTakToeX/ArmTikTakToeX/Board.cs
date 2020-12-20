@@ -53,24 +53,22 @@ namespace ArmTikTakToeX
             }
             mystones = 3; opstones = 3;
         }
-        public int selectSourceTarget(out int x1, out int y1, out int x2, out int y2)
+        public bool isvalid(int x1, int y1, int x2, int y2)
         {
-            x1 = -1; y1 = -1;
-            x2 = -1; y2 = -1;
-            if (rowCrossed() || columnCrossed() || diagonalCrossed())
-            {
-                return 1;
-            }
+            if (Math.Abs(x1 - x2) > 1 || Math.Abs(y1 - y2) > 1
+                || GetColor(x2, y2) != Color.White)
+                return false;
+            if (x1 == x2 || y1 == y2)
+                return true;
+            if (x1 + y1 == 2 && x2 + y2 == 2)
+                return true;
+            if (x1 == y1 && x2 == y2)
+                return true;
 
-            int k = rnd.Next() % 9;
-            x1 = k / 3;
-            y1 = k % 3;
-            while (colboard[x1, y1] != Color.Blue)
-            {
-                k = rnd.Next() % 9;
-                x1 = k / 3;
-                y1 = k % 3;
-            }
+            return false;
+        }
+        bool findDest(int x1, int y1)
+        {
             int[,] dirs = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
             for (var i = 0; i < 4; i++)
             {
@@ -80,40 +78,75 @@ namespace ArmTikTakToeX
                     continue;
                 if (colboard[x, y] == Color.White)
                 {
-                    x2 = x;
-                    y2 = y;
-                    break;
+                    SetOpnStatus(x1, y1, true);
+                    SetOpnStatus(x, y, false);
+                    return true;
                 }
             }
-            if (x1 == y1 && x1 + 1 < 3 && colboard[x1 + 1, y1 + 1] == Color.White)
+            return false;
+        }
+        bool findSource(int candx, int candy)
+        {
+            int[,] dirs = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+            for (var i = 0; i < 4; i++)
             {
-                x2 = x1 + 1;
-                y2 = y1 + 1;
-            }
-            else if (x1 == y1 && x1 - 1 >= 0 && colboard[x1 - 1, y1 - 1] == Color.White)
-            {
-                x2 = x1 - 1;
-                y2 = y1 - 1;
-            }
-            else if (x1 + y1 == 3)
-            {
-                if (x1 - 1 >= 0 && y1 + 1 < 3 && colboard[x1 - 1, y1 + 1] == Color.White)
+                var x = candx + dirs[i, 0];
+                var y = candy + dirs[i, 1];
+                if (x < 0 || y < 0 || x == 3 || y == 3)
+                    continue;
+                if (colboard[x, y] == Color.Blue)
                 {
-                    x2 = x1 - 1;
-                    y2 = y1 + 1;
-                }
-                else if (y1 - 1 >= 0 && x1 + 1 < 3 && colboard[x1 + 1, y1 - 1] == Color.White)
-                {
-                    x2 = x1 + 1;
-                    y2 = y1 - 1;
+                    SetOpnStatus(candx, candy, false);
+                    SetOpnStatus(x, y, true);
+                    return true;
                 }
             }
+            return false;
+        }
+
+        public int moveinboard()
+        {
+            if (rowCrossed() || columnCrossed() || diagonalCrossed())
+            {
+                return 1;
+            }
+            var cds = checkforCand();
+            if (cds.Item1 != -1 && cds.Item2 != -1)
+            {
+                //found possible destination candidates,
+                //look is it possible to find source i.e 
+                //blue adjacent cell to move from
+                var found = findSource(cds.Item1, cds.Item2);
+                if (found)
+                {
+                    Console.WriteLine("123----");
+                    if (rowCrossed() || columnCrossed() || diagonalCrossed())
+                    {
+                        return 2;
+                    }
+                    return 0;
+                }
+            }
+            int k = rnd.Next() % 9;
+            int x1 = k / 3;
+            int y1 = k % 3;
+
+            while (colboard[x1, y1] != Color.Blue)
+            {
+                k = rnd.Next() % 9;
+                x1 = k / 3;
+                y1 = k % 3;
+            }
+            if (!findDest(x1, y1))
+                return -1;
+
             if (rowCrossed() || columnCrossed() || diagonalCrossed())
             {
                 return 2;
             }
             return 0;
         }
+     
         // A function that returns true if any of the row 
         // is crossed with the same player's move 
         bool rowCrossed()
@@ -165,25 +198,146 @@ namespace ArmTikTakToeX
             }
             return (false);
         }
+        Tuple<int, int, Color> checkcols()
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                int cntb = 0;
+                int cntr = 0;
+                int idx = -1;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (colboard[i, j] == Color.White)
+                        idx = i;
+                    if (colboard[i, j] == Color.Red)
+                        cntr++;
+                    if (colboard[i, j] == Color.Blue)
+                        cntb++;
+                }
+                if (cntb == 2 || cntr == 2 && idx != -1)
+                {
+                    var color = cntb == 2 ? Color.Blue : Color.Red;
+                    return new Tuple<int, int, Color>(idx, j, color); ;
+                }
+            }
+            return new Tuple<int, int, Color>(-1, -1, Color.Default);
+        }
+        Tuple<int, int, Color> checkdiag1()
+        {
+            int cntr = 0;
+            int cntb = 0;
+            int idx = -1;
+            for (int i = 0; i < 3; i++)
+            {
+                if (colboard[i, i] == Color.Red)
+                    cntr++;
+                if (colboard[i, i] == Color.Blue)
+                    cntb++;
+                if (colboard[i, i] == Color.White)
+                    idx = i;
+            }
+            if ((cntb == 2 || cntr==2) && idx != -1)
+            {
+                  var color = cntb == 2 ? Color.Blue : Color.Red;
+                return new Tuple<int, int, Color>(idx,idx,color);
+            }
+            return new Tuple<int, int, Color>(-1,-1,Color.Default);
+        }
+        Tuple<int, int, Color> checkdiag2()
+        {
+            int cntr = 0;
+            int cntb = 0;
+            int idx = -1;
+            for (int i = 0; i < 3; i++)
+            {
+                if (colboard[i, 2 - i] == Color.Red)
+                    cntr++;
+                if (colboard[i, 2 - i] == Color.Blue)
+                    cntb++;
+                if (colboard[i, 2 - i] == Color.White)
+                    idx = i;
+            }
+            if ((cntb == 2 || cntr == 2) && idx != -1)
+            {
+                var color = cntb == 2 ? Color.Blue : Color.Red;
+                return new Tuple<int, int, Color>(idx, 2 - idx, color);
+            }
+            return new Tuple<int, int, Color>(-1, -1, Color.Default);
+        }
+        Tuple<int,int,Color> checkrows()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                int idx = -1;
+                int cntb = 0;
+                int cntr = 0;
+                for(int j = 0; j < 3; j++)
+                {
+                    if (colboard[i, j] == Color.White)
+                        idx = j;
+                    if (colboard[i, j] == Color.Red)
+                        cntr++;
+                    if (colboard[i, j] == Color.Blue)
+                        cntb++;
+                }
+                if (cntb == 2 || cntr == 2 && idx != -1)
+                {
+                  var  color = cntb == 2 ? Color.Blue : Color.Red;
+                    return new Tuple<int,int,Color>(i,idx,color);
+                }
+           }
+            return new Tuple<int, int, Color>(1,-1,Color.Default);
+        }
+        //check for 2 blue or 2 red and 1 white cells in row/col/diags
+        Tuple<int,int,Color> checkforCand()
+        {
+            var result = checkrows();
+            if (result.Item1 != -1 && result.Item2 != -1)
+            {
+                return result;
+            }
+            result = checkcols();
+            if (result.Item1 != -1 && result.Item2 != -1)
+            {
+                return result;
+            }
+            result = checkdiag1();
+            if (result.Item1 != -1 && result.Item2 != -1)
+            {
+                return result;
+            }
+            result = checkdiag2();
+            if (result.Item1 != -1 && result.Item2 != -1)
+            {
+                return result;
+            }
+            return new Tuple<int, int, Color>(-1, -1, Color.Default);
+        }
         public int movestone()
         {
             if (rowCrossed() || columnCrossed() || diagonalCrossed())
             {
                 return 1;
             }
-            int x = -1;
-            int y = -1;
-            var rnd = new Random();
-            int k = rnd.Next() % 9;
-            x = k / 3;
-            y = k % 3;
-            while (colboard[x, y] != Color.White)
+            var res = checkforCand();
+            if (res.Item1 != -1 && res.Item2 != -1)
             {
-                k = rnd.Next() % 9;
-                x = k / 3;
-                y = k % 3;
+                colboard[res.Item1, res.Item2] = Color.Blue;
             }
-            colboard[x, y] = Color.Blue;
+            else
+            {
+                var rnd = new Random();
+                int k = rnd.Next() % 9;
+               int x = k / 3;
+                int y = k % 3;
+                while (colboard[x, y] != Color.White)
+                {
+                    k = rnd.Next() % 9;
+                    x = k / 3;
+                    y = k % 3;
+                }
+                colboard[x, y] = Color.Blue;
+            }
             if (rowCrossed() || columnCrossed() || diagonalCrossed())
             {
                 return 2;//Comp win
@@ -191,5 +345,4 @@ namespace ArmTikTakToeX
             return -1;
         }
     }
-
 }

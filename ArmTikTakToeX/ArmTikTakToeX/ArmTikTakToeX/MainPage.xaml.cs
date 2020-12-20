@@ -44,7 +44,7 @@ namespace ArmTikTakToeX
             var boardHeight = height * 3 / 4;
             setsHeight = height / 4;
             layoutWidth = layout.Width;
-            cellSize = (int)Math.Min(layout.Width / (1.5*cols), layout.Width / (1.5*rows));
+            cellSize = (int)Math.Min(layout.Width / (1.5 * cols), layout.Width / (1.5 * rows));
             xMargin = (int)((layout.Width - cols * cellSize) / 2);
             yMargin = (int)((boardHeight - rows * cellSize) / 2);
 
@@ -59,8 +59,8 @@ namespace ArmTikTakToeX
             UpdateBoard();
             UpdateSets();
         }
-        void UpdateBoard() 
-        { 
+        void UpdateBoard()
+        {
             int count = rows * cols;
             System.Diagnostics.Debug.WriteLine("Count = " + count);
 
@@ -79,42 +79,42 @@ namespace ArmTikTakToeX
                     cell.Col = x;
                     cell.Row = y;
 
-                   Xamarin.Forms.Rectangle rect = new Xamarin.Forms.Rectangle(x * cellSize + x*xMargin + CellSpacing / 2,
-                                                   y * cellSize + y*yMargin + CellSpacing / 2,
-                                                   cellSize - CellSpacing,
-                                                   cellSize - CellSpacing);
+                    Xamarin.Forms.Rectangle rect = new Xamarin.Forms.Rectangle(x * cellSize + x * xMargin + CellSpacing / 2,
+                                                    y * cellSize + y * yMargin + CellSpacing / 2,
+                                                    cellSize - CellSpacing,
+                                                    cellSize - CellSpacing);
                     AbsoluteLayout.SetLayoutBounds(cell, rect);
                     index++;
                 }
-          
+
         }
         void UpdateSets()
         {
-            for(int i = 0; i < grid.mystones; i++)
+            for (int i = 0; i < grid.mystones; i++)
             {
-                var cell = new Cell(false,true);//not board cell, my stone
+                var cell = new Cell(false, true);//not board cell, my stone
                 cell.Tapped += OnTapGestureTapped;
                 absoluteLayout.Children.Add(cell);
             }
             for (int i = 0; i < grid.opstones; i++)
             {
-                var cell = new Cell(false,false);//not board cell, not my stone
+                var cell = new Cell(false, false);//not board cell, not my stone
                 absoluteLayout.Children.Add(cell);
             }
             int index = cols * rows;
             int col1 = 0;
             int col2 = (int)layoutWidth - cellSize;//for opponent stones
             int toprow = rows * cellSize + rows * yMargin + CellSpacing;//top row for stones sets
-            for (int x = 0; x < grid.mystones; x++) { 
-                    var cell = (Cell)absoluteLayout.Children[index];
+            for (int x = 0; x < grid.mystones; x++) {
+                var cell = (Cell)absoluteLayout.Children[index];
 
                 Xamarin.Forms.Rectangle rect = new Xamarin.Forms.Rectangle(col1 + CellSpacing / 2,
                                                 toprow + x * cellSize / 3,
                                                 cellSize - CellSpacing,
                                                 cellSize - CellSpacing);
-                    AbsoluteLayout.SetLayoutBounds(cell, rect);
-                    index++;
-                }
+                AbsoluteLayout.SetLayoutBounds(cell, rect);
+                index++;
+            }
             for (int x = 0; x < grid.opstones; x++)
             {
                 Cell cell = (Cell)absoluteLayout.Children[index];
@@ -136,7 +136,7 @@ namespace ArmTikTakToeX
             foreach (View view in absoluteLayout.Children)
             {
                 var cell = view as Cell;
-                if(cell.IsBoardCell)
+                if (cell.IsBoardCell)
                     cell.BackgroundColor = grid.GetColor(cell.Row, cell.Col);
                 else
                 {
@@ -185,88 +185,93 @@ namespace ArmTikTakToeX
                 idx++;
             }
         }
-       async void OnTapGestureTapped(object sender, EventArgs args)
+        bool IsValid(Cell from, Cell to)
         {
-            var cell = sender as Cell;
+            int x1 = from.Row;
+            int y1 = from.Col;
+            int x2 = to.Row;
+            int y2 = to.Col;
+            return grid.isvalid(x1, y1, x2, y2);
+        }
+       async void MoveMyStone(Cell cell)
+        {
             if (!cell.IsBoardCell)
             {
                 prev_cell = cell;
+                return;
             }
-            else {
-                if (grid.mystones > 0)
-                {
-                    if (prev_cell != null)
-                    {
-                        grid.mystones--;
-                        grid.SetStatus(cell.Row, cell.Col, false);
-                        prev_cell = null;
-                        UpdateView();
-                        int res = CompMoveStone();
-                        if (res == 1)
-                        {
-                            await DisplayAlert("You win!", "Game Over!", "Start new game? ");
-                            grid.Reset();
-                            ResetView();
-                        }
-                        else
-                        {
-                            UpdateView();
-                            if (res == 2)
-                            {
-                                await DisplayAlert("You lost!", "Game Over!", "Start new game? ");
-                                grid.Reset();
-                                ResetView();
-                            }
-                        }
-                    }
-                }
             else
             {
-                    if (prev_cell == null)
+                if (prev_cell != null)
+                {
+                    grid.mystones--;
+                    grid.SetStatus(cell.Row, cell.Col, false);
+                    prev_cell = null;
+                    UpdateView();
+                    int res = CompMoveStone();
+                    if (res == 1)
                     {
-                        prev_cell = cell;
-                        if (grid.GetColor(prev_cell.Row, prev_cell.Col) != Color.Red)
-                        {
-                            prev_cell = null;
-                            return;
-                        }
+                        await DisplayAlert("You win!", "Game Over!", "Start new game? ");
+                        grid.Reset();
+                        ResetView();
                     }
                     else
                     {
-                        if (grid.GetColor(cell.Row, cell.Col) == Color.White)
+                        UpdateView();
+                        if (res == 2)
                         {
-                            if (Math.Abs(cell.Row - prev_cell.Row) <= 1 &&
-                                 Math.Abs(cell.Col - prev_cell.Col) <= 1)
-                            {
-                                if (cell.Col == prev_cell.Col ||
-                                    cell.Row == prev_cell.Row ||
-                                    (cell.Row == cell.Col && prev_cell.Row == prev_cell.Col)
-                                    || (cell.Row + cell.Col == prev_cell.Row + prev_cell.Col))
-                                {
-                                    grid.SetStatus(prev_cell.Row, prev_cell.Col, true);
-                                    grid.SetStatus(cell.Row, cell.Col, false);
-                                    UpdateView();
-                                    CompBoardMove();
-                                    prev_cell = null;
-                                }
-                            }
+                            await DisplayAlert("You lost!", "Game Over!", "Start new game? ");
+                            grid.Reset();
+                            ResetView();
                         }
                     }
                 }
             }
         }
+        void OnTapGestureTapped(object sender, EventArgs args)
+        { 
+            var cell = sender as Cell;
+
+            if (grid.mystones > 0)
+            {
+                MoveMyStone(cell);//from stones set to board
+            }
+            else
+            {
+                MoveInBoard(cell);
+            }
+        }
+        void MoveInBoard(Cell cell)
+        {
+            if (prev_cell == null)
+            {
+                prev_cell = cell;
+                if (grid.GetColor(prev_cell.Row, prev_cell.Col) != Color.Red)
+                {
+                    prev_cell = null;
+                    return;
+                }
+            }
+            else
+            {
+                if (grid.GetColor(cell.Row, cell.Col) == Color.White)
+                {
+                    if (!IsValid(prev_cell, cell))
+                    {
+                        prev_cell = null;
+                        return;
+                    }
+                    grid.SetStatus(prev_cell.Row, prev_cell.Col, true);
+                    grid.SetStatus(cell.Row, cell.Col, false);
+                    UpdateView();
+                    CompBoardMove();
+                }
+                prev_cell = null;
+            }
+        }
       async  void CompBoardMove()
         {
-            int x1 = -1;
-            int y1 = -1;
-            int x2 = -1;
-            int y2 = -1;
-            int res = -1;
-            int time = 10000;
-            while (x2 == -1 && y2 == -1 && time-->0)
-            {
-               res = grid.selectSourceTarget(out x1, out y1, out x2, out y2);
-            }
+            int res = grid.moveinboard();
             if(res==1)
             {
                 await DisplayAlert("You win!", "Game Over!", "Start new game? ");
@@ -274,8 +279,6 @@ namespace ArmTikTakToeX
                 ResetView();
                 return;
             }
-            grid.SetOpnStatus(x1, y1, true);
-            grid.SetOpnStatus(x2, y2, false);
             UpdateView();
             if (res == 2)
             {
