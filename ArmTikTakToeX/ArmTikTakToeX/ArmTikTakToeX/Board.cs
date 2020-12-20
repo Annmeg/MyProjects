@@ -119,7 +119,6 @@ namespace ArmTikTakToeX
                 var found = findSource(cds.Item1, cds.Item2);
                 if (found)
                 {
-                    Console.WriteLine("123----");
                     if (rowCrossed() || columnCrossed() || diagonalCrossed())
                     {
                         return 2;
@@ -198,7 +197,7 @@ namespace ArmTikTakToeX
             }
             return (false);
         }
-        Tuple<int, int, Color> checkcols()
+        Tuple<int, int> checkcols()
         {
             for (int j = 0; j < 3; j++)
             {
@@ -216,13 +215,12 @@ namespace ArmTikTakToeX
                 }
                 if (cntb == 2 || cntr == 2 && idx != -1)
                 {
-                    var color = cntb == 2 ? Color.Blue : Color.Red;
-                    return new Tuple<int, int, Color>(idx, j, color); ;
+                    return new Tuple<int, int>(idx, j); ;
                 }
             }
-            return new Tuple<int, int, Color>(-1, -1, Color.Default);
+            return new Tuple<int, int>(-1, -1);
         }
-        Tuple<int, int, Color> checkdiag1()
+        Tuple<int, int> checkdiag1()
         {
             int cntr = 0;
             int cntb = 0;
@@ -239,11 +237,11 @@ namespace ArmTikTakToeX
             if ((cntb == 2 || cntr==2) && idx != -1)
             {
                   var color = cntb == 2 ? Color.Blue : Color.Red;
-                return new Tuple<int, int, Color>(idx,idx,color);
+                return new Tuple<int, int>(idx,idx);
             }
-            return new Tuple<int, int, Color>(-1,-1,Color.Default);
+            return new Tuple<int, int>(-1,-1);
         }
-        Tuple<int, int, Color> checkdiag2()
+        Tuple<int, int> checkdiag2()
         {
             int cntr = 0;
             int cntb = 0;
@@ -260,11 +258,11 @@ namespace ArmTikTakToeX
             if ((cntb == 2 || cntr == 2) && idx != -1)
             {
                 var color = cntb == 2 ? Color.Blue : Color.Red;
-                return new Tuple<int, int, Color>(idx, 2 - idx, color);
+                return new Tuple<int, int>(idx, 2 - idx);
             }
-            return new Tuple<int, int, Color>(-1, -1, Color.Default);
+            return new Tuple<int, int>(-1, -1);
         }
-        Tuple<int,int,Color> checkrows()
+        Tuple<int,int> checkrows()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -282,14 +280,13 @@ namespace ArmTikTakToeX
                 }
                 if (cntb == 2 || cntr == 2 && idx != -1)
                 {
-                  var  color = cntb == 2 ? Color.Blue : Color.Red;
-                    return new Tuple<int,int,Color>(i,idx,color);
+                    return new Tuple<int,int>(i,idx);
                 }
            }
-            return new Tuple<int, int, Color>(1,-1,Color.Default);
+            return new Tuple<int, int>(1,-1);
         }
         //check for 2 blue or 2 red and 1 white cells in row/col/diags
-        Tuple<int,int,Color> checkforCand()
+        Tuple<int,int> checkforCand()
         {
             var result = checkrows();
             if (result.Item1 != -1 && result.Item2 != -1)
@@ -311,7 +308,7 @@ namespace ArmTikTakToeX
             {
                 return result;
             }
-            return new Tuple<int, int, Color>(-1, -1, Color.Default);
+            return new Tuple<int, int>(-1, -1);
         }
         public int movestone()
         {
