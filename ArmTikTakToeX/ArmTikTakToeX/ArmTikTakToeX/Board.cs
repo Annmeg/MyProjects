@@ -126,22 +126,21 @@ namespace ArmTikTakToeX
                     return 0;
                 }
             }
-            int k = rnd.Next() % 9;
-            int x1 = k / 3;
-            int y1 = k % 3;
-
-            while (colboard[x1, y1] != Color.Blue)
-            {
-                k = rnd.Next() % 9;
-                x1 = k / 3;
-                y1 = k % 3;
-            }
-            if (!findDest(x1, y1))
-                return -1;
-
-            if (rowCrossed() || columnCrossed() || diagonalCrossed())
-            {
-                return 2;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (colboard[i, j] == Color.Blue)
+                    {
+                        if (findDest(i, j))
+                        {
+                            if (rowCrossed() || columnCrossed() || diagonalCrossed())
+                            {
+                                return 2;
+                            }
+                            return 0;
+                        }
+                    }
+                }
             }
             return 0;
         }
@@ -325,7 +324,7 @@ namespace ArmTikTakToeX
             {
                 var rnd = new Random();
                 int k = rnd.Next() % 9;
-               int x = k / 3;
+                int x = k / 3;
                 int y = k % 3;
                 while (colboard[x, y] != Color.White)
                 {
