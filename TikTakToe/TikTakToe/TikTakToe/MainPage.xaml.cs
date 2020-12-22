@@ -37,6 +37,8 @@ namespace TikTakToe
         async void OnTapGestureTapped(object sender, EventArgs args)
         {
             Cell cell = (Cell)sender;
+            if (!cell.IsEmpty)
+                return;
             cell.IsEmpty = false;
             grid.SetStatus(cell.Row, cell.Col, "X");
             UpdateView();

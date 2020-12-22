@@ -286,23 +286,24 @@ namespace TikTakToe
             {
                 return 0;//draw
             }
-            int random = randGame.Next() % 8;
             int x = -1;
             int y = -1;
-            if (random == 0)
-            {
-                var rnd = new Random();
-                int k = rnd.Next() % 9;
-                x = k / 3;
-                y = k % 3;
-                while (board[x, y] != "")
-                {
-                    k = rnd.Next() % 9;
-                    x = k / 3;
-                    y = k % 3;
-                }
-            }
-            else
+
+            /*  int random = randGame.Next() % 8;
+              if (random == 0)
+              {
+                  var rnd = new Random();
+                  int k = rnd.Next() % 9;
+                  x = k / 3;
+                  y = k % 3;
+                  while (board[x, y] != "")
+                  {
+                      k = rnd.Next() % 9;
+                      x = k / 3;
+                      y = k % 3;
+                  }
+              }
+              else*/
             {
                 var move = findBestMove(board);
                 x = move.row;
