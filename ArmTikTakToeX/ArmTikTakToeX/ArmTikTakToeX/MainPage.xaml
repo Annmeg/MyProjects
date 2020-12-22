@@ -42,7 +42,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Style="{StaticResource TitleStyle}" 
-               Text="Armenian TikTakToe"
+               Text="Armenian TikTacToe"
                    />
         <Button Style="{StaticResource ButtonStyle}" 
             Text="New Game?"

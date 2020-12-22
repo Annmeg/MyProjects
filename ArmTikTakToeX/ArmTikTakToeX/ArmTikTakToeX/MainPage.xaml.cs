@@ -67,7 +67,9 @@ namespace ArmTikTakToeX
             while (absoluteLayout.Children.Count < count)
             {
                 var cell = new Cell(true);
-                cell.Tapped += OnTapGestureTapped;
+                cell.DragStart += OnDragStart;
+                cell.Dropped += OnDrop;
+
                 absoluteLayout.Children.Add(cell);
             }
 
@@ -93,7 +95,8 @@ namespace ArmTikTakToeX
             for (int i = 0; i < grid.mystones; i++)
             {
                 var cell = new Cell(false, true);//not board cell, my stone
-                cell.Tapped += OnTapGestureTapped;
+                cell.DragStart += OnDragStart;
+                cell.Dropped += OnDrop;
                 absoluteLayout.Children.Add(cell);
             }
             for (int i = 0; i < grid.opstones; i++)
@@ -228,10 +231,13 @@ namespace ArmTikTakToeX
                 }
             }
         }
-        void OnTapGestureTapped(object sender, EventArgs args)
-        { 
+        void OnDragStart(object sender, EventArgs args)
+        {
+            prev_cell = sender as Cell;
+        }
+        void OnDrop(object sender, EventArgs args)
+        {
             var cell = sender as Cell;
-
             if (grid.mystones > 0)
             {
                 MoveMyStone(cell);//from stones set to board

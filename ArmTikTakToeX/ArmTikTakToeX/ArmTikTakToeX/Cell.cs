@@ -16,17 +16,30 @@ namespace ArmTikTakToeX
         public bool IsBoardCell { get; set; }
 
         public event EventHandler Tapped;
+        public event EventHandler DragStart;
+        public event EventHandler Dropped;
 
         public Cell(bool isboardcell, bool ismystone = true)
         {
             BorderColor = Color.Black;
             CornerRadius = 40;
-            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
-            tapGesture.Tapped += (sender, args) =>
+            DragGestureRecognizer dragGesture = new DragGestureRecognizer();
+            DropGestureRecognizer dropGesture = new DropGestureRecognizer();
+
+            dragGesture.DragStarting += (sender, args) =>
             {
-                Tapped?.Invoke(this, EventArgs.Empty);
+                DragStart?.Invoke(this, EventArgs.Empty);
             };
-            GestureRecognizers.Add(tapGesture);
+            dragGesture.CanDrag = true;
+            GestureRecognizers.Add(dragGesture);
+
+            dropGesture.Drop += (sender, args) =>
+            {
+                Dropped?.Invoke(this, EventArgs.Empty);
+            };
+            dropGesture.AllowDrop = true;
+            GestureRecognizers.Add(dropGesture);
+
             IsBoardCell = isboardcell;
             if (!isboardcell)
             {
