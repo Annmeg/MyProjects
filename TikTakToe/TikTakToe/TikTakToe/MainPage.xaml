@@ -32,7 +32,7 @@
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label Text="Tik Tac Toe" TextColor="White" 
+        <Label Text="Tic Tac Toe" TextColor="White" 
                Grid.Column="1"
                Style="{StaticResource LabelStyle}"
               />
