@@ -25,7 +25,7 @@
                 Grid.Column="1"
                 Grid.Row="2"
                 HorizontalOptions="Center"
-                VerticalOptions="Center"
+                Margin="0,60,0,0"
                     TextColor="Black" FontSize="Medium" 
                     BackgroundColor="White"
                     HeightRequest="40"
