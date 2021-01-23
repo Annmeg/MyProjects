@@ -273,8 +273,7 @@ namespace backgammon_v2
                         }
                         else
                         {
-                            string cur = current == Color.White ? "White" : "Black";
-                            reminder.Text = cur + " has no move. Next player's turn";
+                            reminder.Text = "White has no move. Next player's turn";
                             nextPlayer();
                             return;
                         }
@@ -286,13 +285,21 @@ namespace backgammon_v2
                 var ret = await blackTurn(index, n, cnt + 1);
                 if (ret == false)
                 {
-                    if (cnt == 0 && !backgammon.isMovePossible(current, n))
+                    if (!backgammon.isMovePossible(current, n))
                     {
-                        reminder.Text = "Blacks turn: please try to reorder dices and move again.";
-                        return;
+
+                        if (cnt == 0)
+                        {
+                            reminder.Text = "Blacks turn: please try to reorder dices and move again.";
+                            return;
+                        }
+                        else
+                        {
+                            reminder.Text = "Black has no move. Next player's turn";
+                            nextPlayer();
+                            return;
+                        }
                     }
-                    reminder.Text = "Blacks turn: please try to choose other piece to move.";
-                    return;
                 }
             }
             updateAfterMove();
@@ -497,8 +504,12 @@ namespace backgammon_v2
             return;
         }
 
-        private void newgame_Clicked(object sender, EventArgs e)
+        private async void newgame_Clicked(object sender, EventArgs e)
         {
+            var res = await DisplayAlert("", "Start new game?", "ok", "cancel");
+            if (!res)
+                return;
+
             backgammon.reset();
             backgroundLayout.Children.Clear();
             current = Color.White;
