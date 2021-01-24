@@ -17,11 +17,12 @@ namespace backgammon_v2
         board backgammon;
         int n1, n2;
         int cnt;
-        int steps=2;
+        int steps = 2;
         double cellsize;
         Color current;
         string[] dies = new string[6];
         bool firsttime = true;
+        dice _dice;
         public MainPage()
         {
             InitializeComponent();
@@ -34,9 +35,15 @@ namespace backgammon_v2
             dies[3] = "die4_white.png";
             dies[4] = "die5_white.png";
             dies[5] = "die6_white.png";
-           
+            InitializeDice();
         }
-        void buildBoard()
+
+        private void OnDiceRolled(object sender, EventArgs e)
+        {
+            roll.IsEnabled = true;
+        }
+
+        private void buildBoard()
         {
             var center = width / 2;
             int blockSize = (int)(width) / 14;
@@ -87,7 +94,7 @@ namespace backgammon_v2
             backgroundLayout.Children.Add(bar);
         }
 
-        void fillBoard()
+        private void fillBoard()
         {
             var rad = 30;
             int j = 0;
@@ -173,19 +180,19 @@ namespace backgammon_v2
             list.Add(first);
             return list;
         }
-        void updateView()
+        private void updateView()
         {
             backgroundLayout.Children.Clear();
             buildBoard();
             fillBoard();
             fillBars();
         }
-        void nextPlayer()
+        private void nextPlayer()
         {
             current = current == Color.White ? Color.Aqua : Color.White;
             roll.IsEnabled = true;
         }
-        void updateAfterMove()
+        private void updateAfterMove()
         {
             cnt++;
             updateView();
@@ -199,7 +206,7 @@ namespace backgammon_v2
                 reminder.Text = text + " Please roll dices.";
             }
         }
-        async void OnStoneTapped(object sender, EventArgs args)
+        private async void OnStoneTapped(object sender, EventArgs args)
         {
             var c = sender as piece;
             if (c.BackgroundColor != current)
@@ -219,7 +226,7 @@ namespace backgammon_v2
                 nextPlayer();
                 return;
             }
-            if (res ==1)
+            if (res == 1)
             {
                 // cannot move pending piece from bar
                 if (cnt > 0)
@@ -237,7 +244,7 @@ namespace backgammon_v2
                     return;
                 }
             }
-           
+
             if (cnt == 0 && !backgammon.isMovePossible(current, n1)
                 && !backgammon.isMovePossible(current, n2))
             {
@@ -246,7 +253,7 @@ namespace backgammon_v2
                 nextPlayer();
                 return;
             }
-            if(cnt > 0 && !backgammon.isMovePossible(current, n))
+            if (cnt > 0 && !backgammon.isMovePossible(current, n))
             {
                 string cur = current == Color.White ? "White" : "Black";
                 reminder.Text = cur + " has no move. Next player's turn";
@@ -278,7 +285,7 @@ namespace backgammon_v2
                             return;
                         }
                     }
-               }
+                }
             }
             else
             {
@@ -315,14 +322,14 @@ namespace backgammon_v2
             fillBoard();
             fillBars();
         }
-        void hideDices()
+        private void hideDices()
         {
             dice1_.Opacity = 0;
             dice2_.Opacity = 0;
             dice1.Opacity = 0;
             dice2.Opacity = 0;
         }
-        void showDices()
+        private void showDices()
         {
             dice1.ImageSource = dies[n1 - 1];
             dice1.Scale = 0.1;
@@ -330,19 +337,24 @@ namespace backgammon_v2
             dice2.ImageSource = dies[n2 - 1];
             dice2.Scale = 0.1;
             dice2.Opacity = 1;
-            if (firsttime)
-                return;
-            if (n1 == n2)
-            {
-                dice1_.ImageSource = dies[n1 - 1];
-                dice1_.Scale = 0.1;
-                dice2_.ImageSource = dies[n1 - 1];
-                dice2_.Scale = 0.1;
-                dice1_.Opacity = 1;
-                dice2_.Opacity = 1;
-            }
         }
-        void rollDices()
+
+        private void InitializeDice()
+        {
+            _dice = new dice();
+            _dice.RollingChanged += OnDiceRollingChanged;
+            _dice.Rolled += OnDiceRolled;
+        }
+
+        private void OnDiceRollingChanged(object
+              sender, EventArgs e)
+        {
+            hideDices();
+            rollDices();
+            showDices();
+        }
+
+        private void rollDices()
         {
             var r = new Random();
             n1 = r.Next() % 6 + 1;
@@ -361,10 +373,19 @@ namespace backgammon_v2
         private void roll_Clicked(object sender, EventArgs e)
         {
             cnt = 0;
-            roll.IsEnabled = false;
-            hideDices();
-            rollDices();
-            showDices();
+            _dice.Roll();
+            if (!firsttime)
+            {
+                if (n1 == n2)
+                {
+                    dice1_.ImageSource = dies[n1 - 1];
+                    dice1_.Scale = 0.1;
+                    dice2_.ImageSource = dies[n1 - 1];
+                    dice2_.Scale = 0.1;
+                    dice1_.Opacity = 1;
+                    dice2_.Opacity = 1;
+                }
+            }
             reminder.Opacity = 1;
             if (firsttime == true)
             {
@@ -385,18 +406,19 @@ namespace backgammon_v2
                 }
             }
             reorder.IsEnabled = true;
+            roll.IsEnabled = false;
             int n = n1;
             reminder.Text = current == Color.White ? "White's turn. Please choose piece to move." :
                 "Black's turn. Please choose piece to move.";
         }
-        int checkStuckorPending(int move)
+        private int checkStuckorPending(int move)
         {
             if (current == Color.White)
                 return checkStuckorPendingWhite(move);
             else
                 return checkStuckorPendingBlack(move);
         }
-        int checkStuckorPendingWhite(int move)
+        private int checkStuckorPendingWhite(int move)
         {
             bool pending = backgammon.checkPendingWhite();
 
@@ -423,7 +445,7 @@ namespace backgammon_v2
             //no stuck or pending
             return -1;
         }
-        async Task<bool> whiteTurn(int index, int move, int turn)
+        private async Task<bool> whiteTurn(int index, int move, int turn)
         {
             int errorCheck = -1;
             if (move != 0)
@@ -444,7 +466,7 @@ namespace backgammon_v2
             }
             return true;
         }
-        int checkStuckorPendingBlack(int move)
+        private int checkStuckorPendingBlack(int move)
         {
             bool pending = backgammon.checkPendingBlack();
 
@@ -479,8 +501,8 @@ namespace backgammon_v2
             n1 = n2;
             n2 = t;
             showDices();
-         }
-        void fillBars()
+        }
+        private void fillBars()
         {
             if (current == Color.White)
                 bar1.Children.Clear();
@@ -503,7 +525,6 @@ namespace backgammon_v2
             }
             return;
         }
-
         private async void newgame_Clicked(object sender, EventArgs e)
         {
             var res = await DisplayAlert("", "Start new game?", "ok", "cancel");
@@ -520,7 +541,7 @@ namespace backgammon_v2
             fillBars();
         }
 
-        async Task<bool> blackTurn(int index, int move, int turn)
+        private async Task<bool> blackTurn(int index, int move, int turn)
         {
             int errorCheck = -1;
             if (move != 0)
