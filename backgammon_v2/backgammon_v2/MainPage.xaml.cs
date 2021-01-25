@@ -40,7 +40,7 @@ namespace backgammon_v2
 
         private void OnDiceRolled(object sender, EventArgs e)
         {
-            roll.IsEnabled = true;
+            roll_completed();
         }
 
         private void buildBoard()
@@ -374,6 +374,10 @@ namespace backgammon_v2
         {
             cnt = 0;
             _dice.Roll();
+        }
+        private void roll_completed()
+        {
+            roll.IsEnabled = false;
             if (!firsttime)
             {
                 if (n1 == n2)
@@ -406,7 +410,6 @@ namespace backgammon_v2
                 }
             }
             reorder.IsEnabled = true;
-            roll.IsEnabled = false;
             int n = n1;
             reminder.Text = current == Color.White ? "White's turn. Please choose piece to move." :
                 "Black's turn. Please choose piece to move.";
