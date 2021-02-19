@@ -1,0 +1,57 @@
+﻿@page "/tictactoe"
+@using GameEngine.Models;
+
+@using Microsoft.AspNetCore.SignalR.Client
+
+<h1 style="text-align: center;color:white">Tic Tac Toe</h1>
+
+@code {
+    GameBoard board = new GameBoard();
+    HubConnection connection;
+    protected async override Task OnInitializedAsync()
+    {
+        //Initialize SignalR
+        connection = new HubConnectionBuilder()
+         .WithUrl("https://localhost:44380/gamehub")
+        .Build();
+        connection.On<string[]>("NotifyUser", NotifyUser);
+
+        await connection.StartAsync();
+
+    }
+    private async Task NotifyUser(string[] b)
+    {
+        /* board = newboard;
+         if (engine.IsWon(board, engine.botPlayer))
+             playerWon = "Bot";
+         else if (engine.GetAvailableSpots(board).Length == 0)
+             isDraw = true;
+         StateHasChanged();
+         return Task.CompletedTask;*/
+
+    }
+}
+
+
+
+@if (!board.GameComplete)
+{
+<h2>@board.CurrentTurn's Turn!</h2> }
+else
+{
+<h2>@board.GetGameCompleteMessage() <button class="btn btn-success" @onclick="@(() => board.Reset())">Reset</button></h2>}
+
+<div class="board" style="background:#ffd800; border:medium;width:180px">
+    @for (int i = 0; i < 3; i++)
+    {
+<div class="column">
+    @for (int j = 0; j < 3; j++)
+    {
+        int x = i;
+        int y = j;
+<div class="gamepiece
+                         @board.Board[i, j].Style.ToString().ToLower()" @onclick="@(() => board.PieceClicked(x, y))"
+     style="@(board.IsGamePieceAWinningPiece(i, j) ? "opacity: 0.4" : "")"></div>}
+</div>}
+</div>
+
