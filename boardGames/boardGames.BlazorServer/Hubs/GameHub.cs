@@ -31,12 +31,12 @@ namespace boardGames.BlazorServer.Hubs
             _logger.LogInformation("Bot left");
         }
 
-        public async Task OnBotMoveReceived(string[] board, string connectionID)
+        public async Task OnBotMoveReceived(string[,] board, string connectionID)
         {
             await Clients.Client(connectionID).SendAsync("NotifyUser", board);
         }
 
-        public async Task OnUserMoveReceived(string[] board)
+        public async Task OnUserMoveReceived(string[,] board)
         {
             await Clients.Group(BOT_GROUP).SendAsync("NotifyBot", board, Context.ConnectionId);
         }

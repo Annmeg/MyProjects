@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameEngine.Models;
+using GameEngine.Enums;
 
 namespace gameWebservice
 {
@@ -14,27 +15,27 @@ namespace gameWebservice
     {
         private readonly ILogger<Worker> _logger;
         private HubConnection connection;
-
+        private GameBoard gameboard;
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
         }
-        async Task NotifyBot(string[] board, string connectionID)
+        async Task NotifyBot(string[,] board, string connectionID)
         {
-            GameBoard game = new GameBoard();
             _logger.LogInformation($"Move received from {connectionID}");
-            //  Move move = board.GetBestSpot(board, board.botPlayer);
-            //   board[int.Parse(move.index)] = board.botPlayer;
-            //   _logger.LogInformation($"Bot Move with the index of {move.index} send to {connectionID}");
+             Move move = gameboard.findBestMove();
+            board[move.row,move.col] = "O";
+             _logger.LogInformation($"Bot Move with {move.row}, {move.col} send to {connectionID}");
             await connection.InvokeAsync("OnBotMoveReceived", board, connectionID);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            gameboard = new GameBoard();
             connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:44380/gamehub")
+                .WithUrl("https://localhost:5001/")
                 .Build();
-            connection.On<string[], string>("NotifyBot", NotifyBot);
+            connection.On<string[,], string>("NotifyBot", NotifyBot);
             await connection.StartAsync(); // Start the connection.
 
             //Add to BOT Group When Bot Connected
