@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameEngine", "GameEngine\GameEngine.csproj", "{B8C4A4E0-0E85-4E44-AC8E-FD2815F6CF6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gameWebservice", "gameWebservice\gameWebservice.csproj", "{ECD96943-15A4-451B-86FD-39802B0B77E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gameWebservice", "gameWebservice\gameWebservice.csproj", "{ECD96943-15A4-451B-86FD-39802B0B77E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "boardGames.BlazorServer", "boardGames.BlazorServer\boardGames.BlazorServer.csproj", "{25F79077-66A9-4303-80A9-F57195DDF423}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "boardGames.BlazorServer", "boardGames.BlazorServer\boardGames.BlazorServer.csproj", "{25F79077-66A9-4303-80A9-F57195DDF423}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

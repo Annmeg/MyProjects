@@ -11,7 +11,7 @@ namespace GameEngine.Models
         public readonly string botPlayer = "O";
         public readonly string humanPlayer = "X";
 
-        public string[,] Board { get; set; }
+        public string[] Board { get; set; }
 
         public string CurrentTurn = "X";
 
@@ -21,18 +21,14 @@ namespace GameEngine.Models
         {
             Reset();
         }
-
         public void Reset()
         {
-            Board = new string[3, 3];
+            Board = new string[9];
 
             //Populate the Board with blank pieces
-            for (int i = 0; i <= 2; i++)
+            for (int i = 0; i <= 8; i++)
             {
-                for (int j = 0; j <= 2; j++)
-                {
-                    Board[i, j] = "";
-                }
+                Board[i] = "";
             }
         }
 
@@ -43,17 +39,17 @@ namespace GameEngine.Models
             // if (GameComplete) { return; }
 
             //If the space is not already claimed...
-            var clickedSpace = Board[x, y];
+            var clickedSpace = Board[x*3+ y];
             if (clickedSpace == "")
             {
                 //Set the marker to the current turn marker (X or O), then make it the other player's turn
-                Board[x, y] = "X";// CurrentTurn;
+                Board[x*3+ y] = "X";// CurrentTurn;
                 
-                var move = findBestMove();
-                if (move.row == -1 && move.col == -1)
+              //  var move = findBestMove();
+               // if (move.row == -1 && move.col == -1)
                     return true;
 
-                Board[move.row, move.col] = "O";
+               // Board[move.row*3+ move.col] = "O";
                 //SwitchTurns();
                 return true;
             }
@@ -76,7 +72,7 @@ namespace GameEngine.Models
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    pieceBlankCount = this.Board[i, j] == ""
+                    pieceBlankCount = this.Board[i*3+ j] == ""
                                         ? pieceBlankCount + 1
                                         : pieceBlankCount;
                 }
@@ -107,7 +103,7 @@ namespace GameEngine.Models
 
         private WinningPlay EvaluatePieceForWinner(int i, int j, EvaluationDirection dir)
         {
-            var currentPiece = Board[i, j];
+            var currentPiece = Board[i*3+ j];
             if (currentPiece == "")
             {
                 return null;
@@ -139,7 +135,7 @@ namespace GameEngine.Models
                         break;
                 }
                 if (iNext < 0 || iNext >= 3 || jNext < 0 || jNext >= 3) { break; }
-                if (Board[iNext, jNext] == currentPiece)
+                if (Board[iNext*3+ jNext] == currentPiece)
                 {
                     winningMoves.Add($"{iNext},{jNext}");
                     inARow++;
@@ -212,7 +208,14 @@ namespace GameEngine.Models
             Move bestMove = new Move();
             bestMove.row = -1;
             bestMove.col = -1;
-            var temp = Board;
+            string[,] temp = new string[3, 3];
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    temp[i, j] = Board[i * 3 + j];
+                }
+            }
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)

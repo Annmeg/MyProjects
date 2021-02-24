@@ -12,14 +12,14 @@
     {
         //Initialize SignalR
         connection = new HubConnectionBuilder()
-         .WithUrl("https://localhost:5001/gamehub")
+         .WithUrl("https://localhost:44380/gamehub")
         .Build();
-        connection.On<string[,]>("NotifyUser", NotifyUser);
+        connection.On<string[]>("NotifyUser", NotifyUser);
 
-        await connection.StartAsync();
+       await connection.StartAsync();
 
     }
-    private async Task NotifyUser(string[,] newboard)
+    private async Task NotifyUser(string[] newboard)
     {
         board.Board = newboard;
         /*  if (engine.IsWon(board, engine.botPlayer))
@@ -34,13 +34,9 @@
         await connection.InvokeAsync("OnUserMoveReceived", board.Board);
         StateHasChanged();
     }
-
 }
- 
 
-
-
-    @if (!board.GameComplete)
+@if (!board.GameComplete)
 {
 <h2>@board.CurrentTurn's Turn!</h2> }
 else
@@ -56,7 +52,7 @@ else
         int x = i;
         int y = j;
 <div class="gamepiece
-                         @board.Board[i, j].ToLower()" @onclick="@(() =>  OnPieceClicked(x, y))"
+                         @board.Board[i*3+ j].ToLower()" @onclick="@(() =>  OnPieceClicked(x, y))"
      style="@(board.IsGamePieceAWinningPiece(i, j) ? "opacity: 0.4" : "")"></div>}
 </div>}
 </div>
