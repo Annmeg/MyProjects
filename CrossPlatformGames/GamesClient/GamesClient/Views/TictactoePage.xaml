@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GamesClient.Views.TictactoePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0, 10" />
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="Margin" Value="0, 5" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid BackgroundColor="PowderBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="300" />
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Text="Tic Tac Toe" TextColor="White" 
+               Grid.Column="1"
+               Style="{StaticResource LabelStyle}"
+              />
+        <Label x:Name="current" Grid.Column="1" Grid.Row="2" TextColor="Black" FontAttributes="Italic"
+           FontSize="Medium"
+             />
+        <Button x:Name="newGame" Text="New Game?" IsEnabled="False"  Grid.Column="1" Grid.Row="3" TextColor="Black" FontAttributes="Italic"
+           FontSize="Medium" Clicked="newGame_Clicked"
+             />
+
+        <AbsoluteLayout Grid.Column="1" Grid.Row="1" x:Name="absoluteLayout"
+                        BackgroundColor="PowderBlue"
+                          SizeChanged="OnLayoutSizeChanged" />
+
+    </Grid>
+</ContentPage>

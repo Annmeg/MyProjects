@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GamesClient.MainPage">
+    <Grid>
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+    </Grid>
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Tic tac toe" Grid.Row="1"
+                 IconImageSource="example_icon.png"
+                         Clicked="TTT_Clicked"
+                 Order="Primary"
+                 Priority="0" />
+        <ToolbarItem Text="2048" Grid.Row="2"
+                 IconImageSource="example_icon.png"
+                     Clicked="G2048_Clicked"
+
+                 Order="Primary"
+                 Priority="0" />
+        <ToolbarItem Text="Backgammon" Grid.Row="0"
+                 IconImageSource="example_icon.png"
+                     Clicked="Bgm_Clicked"
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
+
+</ContentPage>
