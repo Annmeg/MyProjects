@@ -10,9 +10,9 @@ namespace GamesClient.Services
 {
     class TictactoeDataProvider : IDataProvider
     {
-        private static readonly HttpClient client = new HttpClient();
-        private string BaseUrl = "https://webgamesapi.azurewebsites.net/api/games";
         // private string BaseUrl = "http://192.168.86.24:45455/api/games";// http://192.168.86.24:45455/api/games
+        private static readonly HttpClient client = new HttpClient();
+        private static string BaseUrl = "https://webgamesapi.azurewebsites.net/api/games";
 
         public async Task<GameBoard> GetBoardData(string name, int id, int user)
         {

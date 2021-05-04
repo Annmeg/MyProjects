@@ -24,9 +24,9 @@ namespace GamesClient
             await Navigation.PushAsync(new TictactoePage());
         }
 
-        private void Bgm_Clicked(object sender, EventArgs e)
+        private async void Bgm_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new BackgammonPage());
         }
     }
 }

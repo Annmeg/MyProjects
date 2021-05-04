@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GamesClient.Views.BackgammonPage">
+    <Grid  BackgroundColor="PowderBlue">
+        <Grid.RowDefinitions >
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="220"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+        <Label Text="Backgammon" FontSize="Large" TextColor="White" FontFamily="Roman" Grid.Column="1" 
+              VerticalOptions="Center" HorizontalOptions="Center" TextDecorations="Underline"/>
+        <StackLayout x:Name="bars" Orientation="Horizontal"
+                     Grid.Column="1" Grid.Row="2" HeightRequest="20" HorizontalOptions="Center"
+                     Margin="0,2,0,190">
+            <AbsoluteLayout x:Name="bar1" BackgroundColor="White" Margin="0,0,2,0" HeightRequest="20" WidthRequest="189" HorizontalOptions="Start"/>
+            <AbsoluteLayout x:Name="bar2" BackgroundColor="White" Margin="2,0,0,0" HeightRequest="20" WidthRequest="189" HorizontalOptions="End"/>
+        </StackLayout>
+        <AbsoluteLayout x:Name="backgroundLayout" Grid.Row="1" Grid.Column="1" BackgroundColor="White"
+                      SizeChanged="onLayout_SizeChanged" />
+
+        <Button x:Name="dice1" Margin="40,0,0,0" Grid.Row="1" Grid.Column="1" Rotation="15"  WidthRequest="30" HeightRequest="30" Opacity="0" FontSize="30" VerticalOptions="Center" HorizontalOptions="Start"/>
+        <Button x:Name="dice1_" Margin="80,0,0,0" Grid.Row="1" Grid.Column="1"  WidthRequest="30" HeightRequest="30" Opacity="0" FontSize="30" VerticalOptions="Center" HorizontalOptions="Start"/>
+        <Button x:Name="dice2_" Margin="0,0,80,0" Grid.Row="1" Grid.Column="1" Rotation="15"  WidthRequest="30" HeightRequest="30" Opacity="0" FontSize="30" VerticalOptions="Center" HorizontalOptions="End"/>
+        <Button x:Name="dice2" Margin="0,0,40,0" Grid.Row="1" Grid.Column="1" WidthRequest="30" HeightRequest="30" Opacity="0" FontSize="30" VerticalOptions="Center"  HorizontalOptions="End"/>
+        <StackLayout Grid.Row="2"  Grid.Column="1" Margin="10,50,10,10" Orientation="Vertical">
+            <StackLayout Orientation="Horizontal"  HeightRequest="50"
+                    HorizontalOptions="Center">
+                <Button x:Name="roll" FontSize="Body" 
+                    HorizontalOptions="Start" 
+                    Margin="20,5,0,0"
+                    Text="Roll dices!" 
+                    TextColor="Blue"
+                    HeightRequest="40"
+                    Clicked="roll_Clicked"
+                  />
+                <Button x:Name="newgame" FontSize="Body" 
+                    HorizontalOptions="End" 
+                    Margin="40,5,10,0"
+                    Text="New game?" 
+                    TextColor="Blue"
+                    HeightRequest="40"
+                    Clicked="newgame_Clicked"
+                   />
+            </StackLayout>
+            <Label x:Name="reminder"
+                   LineBreakMode="WordWrap"
+                   WidthRequest="190"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" FontSize="Medium"/>
+            <Button x:Name="reorder" IsEnabled="False"
+                    FontSize="Body" Text="Reorder dices?"
+                    HorizontalOptions="Center"
+                    Clicked="reorder_Clicked"
+                    />
+        </StackLayout>
+    </Grid>
+</ContentPage>

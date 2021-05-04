@@ -5,25 +5,30 @@
     <Grid>
         <Grid.RowDefinitions>
 
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
     </Grid>
     <ContentPage.ToolbarItems >
-        <ToolbarItem Text="Tic tac toe" Grid.Row="1"
+        <ToolbarItem Text="Tic tac toe" Grid.Row="1" Grid.Column="1"
                  IconImageSource="example_icon.png"
                          Clicked="TTT_Clicked"
                  Order="Primary"
                  Priority="0" />
-        <ToolbarItem Text="2048" Grid.Row="2"
+        <ToolbarItem Text="2048" Grid.Row="2" Grid.Column="1"
                  IconImageSource="example_icon.png"
                      Clicked="G2048_Clicked"
 
                  Order="Primary"
                  Priority="0" />
-        <ToolbarItem Text="Backgammon" Grid.Row="0"
+        <ToolbarItem Text="Backgammon" Grid.Row="0" Grid.Column="1"
                  IconImageSource="example_icon.png"
                      Clicked="Bgm_Clicked"
                  Order="Primary"
